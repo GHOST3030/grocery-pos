@@ -1,0 +1,157 @@
+// Grocery Store POS — Local, single-terminal, PostgreSQL
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // e.g. postgresql://postgres:password@localhost:5432/pos_db
+}
+
+// ---------- USERS & AUTH ----------
+
+enum Role {
+  MANAGER     // full access: products, users, reports, settings
+  ACCOUNTANT  // view sales/reports, no product/user management
+  CASHIER     // checkout/POS screen only
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  fullName     String
+  role         Role     @default(CASHIER)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  sales        Sale[]
+  stockAdjustments StockAdjustment[]
+}
+
+// ---------- CATALOG ----------
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Supplier {
+  id        String    @id @default(uuid())
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  sku         String    @unique          // barcode value
+  name        String
+  description String?
+  costPrice   Decimal   @db.Decimal(10, 2)
+  sellPrice   Decimal   @db.Decimal(10, 2)
+  unit        String    @default("pcs")  // pcs, kg, box, etc.
+  stockQty    Decimal   @default(0) @db.Decimal(10, 3)
+  reorderLevel Decimal  @default(5) @db.Decimal(10, 3)
+  active      Boolean   @default(true)
+
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  supplierId  String?
+  supplier    Supplier? @relation(fields: [supplierId], references: [id])
+
+  saleItems       SaleItem[]
+  stockAdjustments StockAdjustment[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([name])
+}
+
+// ---------- SALES ----------
+
+enum PaymentMethod {
+  CASH
+  CARD
+  MIXED
+}
+
+model Sale {
+  id            String        @id @default(uuid())
+  receiptNo     String        @unique
+  cashierId     String
+  cashier       User          @relation(fields: [cashierId], references: [id])
+
+  items         SaleItem[]
+
+  subtotal      Decimal       @db.Decimal(10, 2)
+  discount      Decimal       @default(0) @db.Decimal(10, 2)
+  tax           Decimal       @default(0) @db.Decimal(10, 2)
+  total         Decimal       @db.Decimal(10, 2)
+
+  paymentMethod PaymentMethod @default(CASH)
+  amountPaid    Decimal       @db.Decimal(10, 2)
+  changeDue     Decimal       @default(0) @db.Decimal(10, 2)
+
+  voided        Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+
+  @@index([createdAt])
+}
+
+model SaleItem {
+  id         String   @id @default(uuid())
+  saleId     String
+  sale       Sale     @relation(fields: [saleId], references: [id])
+
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+
+  qty        Decimal  @db.Decimal(10, 3)
+  unitPrice  Decimal  @db.Decimal(10, 2)   // price at time of sale
+  lineTotal  Decimal  @db.Decimal(10, 2)
+
+  @@index([saleId])
+  @@index([productId])
+}
+
+// ---------- INVENTORY ADJUSTMENTS ----------
+
+enum AdjustmentReason {
+  RESTOCK
+  DAMAGE
+  CORRECTION
+  RETURN
+}
+
+model StockAdjustment {
+  id         String           @id @default(uuid())
+  productId  String
+  product    Product          @relation(fields: [productId], references: [id])
+
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+
+  qtyChange  Decimal          @db.Decimal(10, 3) // positive or negative
+  reason     AdjustmentReason
+  note       String?
+  createdAt  DateTime         @default(now())
+
+  @@index([productId])
+}
+
+// ---------- SETTINGS ----------
+
+model Setting {
+  key   String @id
+  value String
+}

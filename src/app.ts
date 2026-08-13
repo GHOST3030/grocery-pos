@@ -1,0 +1,37 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import { config } from './config';
+import { errorHandler } from './shared/errors/errorHandler';
+import { authRouter } from './features/auth/presentation/auth.routes';
+
+export const app = express();
+
+app.use(helmet());
+app.use(
+  cors({
+    origin: config.corsOrigin,
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(morgan(config.isProduction ? 'combined' : 'dev'));
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', mode: config.deployMode, env: config.nodeEnv });
+});
+
+// Feature routes — one mount point per feature, added here as each ships.
+app.use('/api/auth', authRouter);
+// app.use('/api/products', productsRouter);   // Phase 2
+// app.use('/api/inventory', inventoryRouter);  // Phase 2
+// app.use('/api/sales', salesRouter);          // Phase 3
+// app.use('/api/reports', reportsRouter);      // Phase 4 (later phase)
+
+app.use((req, res) => {
+  res.status(404).json({ error: { code: 'NOT_FOUND', message: `Route ${req.method} ${req.path} not found` } });
+});
+
+// Error handler must be registered last.
+app.use(errorHandler);
