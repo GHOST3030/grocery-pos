@@ -51,7 +51,7 @@
    Fill in `DATABASE_URL` and a strong `JWT_SECRET`.
 3. Install dependencies (already run once in this sandbox, but on a fresh machine):
    ```bash
-   npm install
+   npm install 
    ```
 4. Generate the Prisma client and run the first migration:
    ```bash

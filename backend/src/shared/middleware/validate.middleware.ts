@@ -15,7 +15,7 @@ export function validate(schema: ZodType<any>) {
       params: req.params,
     });
     req.body = parsed.body ?? req.body;
-    req.query = parsed.query ?? req.query;
+    if (parsed.query) Object.assign(req.query, parsed.query);
     req.params = parsed.params ?? req.params;
     next();
   };
