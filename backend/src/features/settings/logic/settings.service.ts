@@ -1,10 +1,10 @@
 import { prisma } from '../../../shared/database/prisma';
 
 const DEFAULTS: Record<string, string> = {
-  storeName: 'My Grocery Store',
-  currencySymbol: '$',
+  storeName: 'متجري',
+  currencySymbol: 'R.Y',
   taxRate: '0',
-  receiptFooter: 'Thank you for shopping with us!',
+  receiptFooter: 'شكراً لتسوقكم معنا!',
   printerInterface: 'usb', // e.g. 'usb', 'tcp://192.168.x.x', '/dev/usb/lp0'
 };
 
