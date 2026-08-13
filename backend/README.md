@@ -12,6 +12,33 @@
   - `GET /api/auth/me` — returns the current user (requires `Authorization: Bearer <token>`)
 - Roles: `MANAGER`, `ACCOUNTANT`, `CASHIER`
 
+## Phase 2 — Product Management
+
+- **Products** (`/api/products`) — CRUD (add/update/remove — soft delete), SKU/barcode
+  lookup (`GET /api/products/sku/:sku`), manager-only writes, any-role reads
+- **Categories** (`/api/categories`) — CRUD, manager-only writes
+- **Suppliers** (`/api/suppliers`) — CRUD, manager-only writes
+
+## Phase 3 — Core POS Flow (checkout + print bill)
+
+- **Sales / checkout** (`/api/sales`):
+  - `POST /api/sales/checkout` — the core POS transaction. Runs entirely inside
+    one DB transaction: locks the relevant product rows (`SELECT ... FOR UPDATE`),
+    validates stock and active status, computes totals **server-side** from the
+    locked prices (client only sends productId + qty, never prices), decrements
+    stock, and writes the `Sale` + `SaleItem` rows. Any failure rolls back the
+    whole transaction — never a partial sale or stock decremented without a
+    matching sale record.
+  - `GET /api/sales/:id`, `GET /api/sales/receipt/:receiptNo` — look up a sale
+  - `GET /api/sales?from=&to=` — list sales in a date range (manager/accountant only)
+  - `POST /api/sales/:id/void` — void a sale (manager only; does not auto-restore
+    stock — that should go through a deliberate inventory adjustment later)
+  - `POST /api/sales/:id/print` — prints the receipt via ESC/POS thermal printer
+    and triggers the cash-drawer kick. Printing failures never affect the already-
+    completed sale — they're surfaced as a separate error.
+- **Settings** (`/api/settings`) — store name, currency symbol, tax rate, receipt
+  footer, printer interface. Any role can read, manager-only to update.
+
 ## Setup (run this on your own machine — not in this sandbox)
 
 1. Install PostgreSQL locally (or point `DATABASE_URL` at a hosted instance for cloud mode).
@@ -60,10 +87,9 @@ environment's network. The schema and all TypeScript code have been reviewed and
 type-checked against everything except the Prisma-generated types themselves — it
 will generate normally on a machine with regular internet access.
 
-## Next: Phase 2 — Product Management
+## Next: Phase 4 — Sales Analytics (later phase)
 
-Copy the `auth` feature's structure (`data/logic/presentation`) for the `products`
-feature: entity → repository interface → Prisma repository → service (with
-`DuplicateSkuError` business rule) → Zod schemas → controller → routes, guarded by
-`requireRole('MANAGER')` for write operations.
+Add reporting endpoints for sales totals and top-selling products across
+today / this week / this month, likely a new `reports` feature that reads
+from the `Sale`/`SaleItem` tables with date-range aggregation queries.
 # grocery-pos

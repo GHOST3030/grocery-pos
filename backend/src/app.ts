@@ -8,6 +8,8 @@ import { authRouter } from './features/auth/presentation/auth.routes';
 import { productRouter } from './features/products/presentation/product.routes';
 import { categoryRouter } from './features/categories/presentation/category.routes';
 import { supplierRouter } from './features/suppliers/presentation/supplier.routes';
+import { saleRouter } from './features/sales/presentation/sale.routes';
+import { settingsRouter } from './features/settings/presentation/settings.routes';
 
 export const app = express();
 
@@ -30,7 +32,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/suppliers', supplierRouter);
-// app.use('/api/sales', salesRouter);          // Phase 3
+app.use('/api/sales', saleRouter);
+app.use('/api/settings', settingsRouter);
 // app.use('/api/reports', reportsRouter);      // Phase 4 (later phase)
 
 app.use((req, res) => {
