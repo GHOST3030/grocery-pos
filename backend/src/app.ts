@@ -10,6 +10,7 @@ import { categoryRouter } from './features/categories/presentation/category.rout
 import { supplierRouter } from './features/suppliers/presentation/supplier.routes';
 import { saleRouter } from './features/sales/presentation/sale.routes';
 import { settingsRouter } from './features/settings/presentation/settings.routes';
+import { reportRouter } from './features/reports/presentation/report.routes';
 
 export const app = express();
 
@@ -34,7 +35,7 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/suppliers', supplierRouter);
 app.use('/api/sales', saleRouter);
 app.use('/api/settings', settingsRouter);
-// app.use('/api/reports', reportsRouter);      // Phase 4 (later phase)
+app.use('/api/reports', reportRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: { code: 'NOT_FOUND', message: `Route ${req.method} ${req.path} not found` } });

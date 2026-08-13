@@ -87,9 +87,16 @@ environment's network. The schema and all TypeScript code have been reviewed and
 type-checked against everything except the Prisma-generated types themselves — it
 will generate normally on a machine with regular internet access.
 
-## Next: Phase 4 — Sales Analytics (later phase)
+## Phase 4 — Sales Analytics
 
-Add reporting endpoints for sales totals and top-selling products across
-today / this week / this month, likely a new `reports` feature that reads
-from the `Sale`/`SaleItem` tables with date-range aggregation queries.
+- **Reports** (`/api/reports`) — manager and accountant only, not cashier:
+  - `GET /api/reports/summary?period=today|week|month` — sales count, gross
+    revenue, discount/tax totals, items sold, for the given period
+  - `GET /api/reports/top-products?period=today|week|month&limit=10` — best-selling
+    products for the period, ranked by quantity sold
+  - `GET /api/reports/dashboard?topProductsLimit=5` — one call returning all three
+    periods' summaries plus their top-product lists, for a single dashboard screen
+  - Voided sales are excluded from every figure. Week starts Monday (single place
+    to change in `period-range.ts` if the store wants Sunday-start weeks).
+
 # grocery-pos
