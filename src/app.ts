@@ -5,6 +5,9 @@ import morgan from 'morgan';
 import { config } from './config';
 import { errorHandler } from './shared/errors/errorHandler';
 import { authRouter } from './features/auth/presentation/auth.routes';
+import { productRouter } from './features/products/presentation/product.routes';
+import { categoryRouter } from './features/categories/presentation/category.routes';
+import { supplierRouter } from './features/suppliers/presentation/supplier.routes';
 
 export const app = express();
 
@@ -24,8 +27,9 @@ app.get('/health', (_req, res) => {
 
 // Feature routes — one mount point per feature, added here as each ships.
 app.use('/api/auth', authRouter);
-// app.use('/api/products', productsRouter);   // Phase 2
-// app.use('/api/inventory', inventoryRouter);  // Phase 2
+app.use('/api/products', productRouter);
+app.use('/api/categories', categoryRouter);
+app.use('/api/suppliers', supplierRouter);
 // app.use('/api/sales', salesRouter);          // Phase 3
 // app.use('/api/reports', reportsRouter);      // Phase 4 (later phase)
 
