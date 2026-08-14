@@ -5,16 +5,52 @@
   --font-sans: "Cairo Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
 
-  --color-base-950: #08090d;
-  --color-base-900: #0e1015;
-  --color-base-850: #12151c;
-  --color-base-800: #171b24;
-  --color-base-700: #1f2531;
-  --color-base-600: #2a3142;
-  --color-base-400: #7c8698;
-  --color-base-300: #a6aeba;
-  --color-base-200: #c8cdd6;
-  --color-base-100: #e8eaee;
+  /* Base scale — pine-tinted near-black instead of neutral gray, so the
+     whole app reads as "grocer's ledger" rather than a generic dark
+     SaaS dashboard. */
+  --color-base-950: #0B120E;
+  --color-base-900: #101A14;
+  --color-base-850: #141F18;
+  --color-base-800: #1B2820;
+  --color-base-700: #24352A;
+  --color-base-600: #34493A;
+  --color-base-400: #8FA695;
+  --color-base-300: #AEC2B2;
+  --color-base-200: #D2DED4;
+  --color-base-100: #EDF2EE;
+
+  /* Primary action + success — evergreen, not neon SaaS emerald. */
+  --color-emerald-950: #0E211C;
+  --color-emerald-500: #1F6B4A;
+  --color-emerald-400: #2E8C63;
+  --color-emerald-300: #86C9A3;
+
+  /* Repurposed as the mustard "shelf-tag" accent — used for the gradient
+     badge and wherever the original design paired emerald with teal. */
+  --color-teal-600: #A87F02;
+  --color-teal-500: #C99A03;
+
+  /* Danger / alerts — tomato red-orange instead of stock Tailwind red. */
+  --color-red-500: #BB3E10;
+  --color-red-400: #D65A26;
+  --color-red-300: #E8967A;
+
+  /* Mustard family, aligned with teal-repurpose above for consistency
+     across badges (CASHIER role, month report accent, etc). */
+  --color-amber-500: #C99A03;
+  --color-amber-300: #E8CD7A;
+
+  /* Third accent for report gradients — warm rust, distinct from tomato. */
+  --color-orange-500: #B5651D;
+  --color-orange-300: #D9A876;
+
+  /* Muted steel — replaces bright sky/indigo for the ACCOUNTANT badge
+     and "this week" report accent. */
+  --color-sky-500: #3E7D8C;
+  --color-sky-300: #9CC7CF;
+  --color-indigo-500: #4A5A8C;
+
+  --radius-tag: 4px;
 }
 
 @layer base {
@@ -39,14 +75,14 @@
   }
   * {
     scrollbar-width: thin;
-    scrollbar-color: #2a3142 transparent;
+    scrollbar-color: #34493A transparent;
   }
   *::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   *::-webkit-scrollbar-thumb {
-    background: #2a3142;
+    background: #34493A;
     border-radius: 8px;
   }
   *::-webkit-scrollbar-track {
@@ -75,5 +111,40 @@
   }
   .badge {
     @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold;
+  }
+
+  /* Shelf-tag: the signature price/total element — a die-cut chip with a
+     notch, mustard on dark, used for totals and highlighted figures. */
+  .shelf-tag {
+    @apply relative inline-flex items-baseline gap-0.5 rounded px-2.5 py-0.5 font-mono font-semibold;
+    background: rgba(201, 154, 3, 0.14);
+    color: #E8CD7A;
+    border: 1.5px solid rgba(201, 154, 3, 0.55);
+  }
+  .shelf-tag::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--color-base-850);
+    border: 1.5px solid rgba(201, 154, 3, 0.55);
+    border-radius: 50%;
+  }
+
+  /* Tear-line: perforated divider evoking a paper receipt, used above totals. */
+  .tear-line {
+    border: none;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--color-base-600) 0,
+      var(--color-base-600) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+    opacity: 0.6;
   }
 }

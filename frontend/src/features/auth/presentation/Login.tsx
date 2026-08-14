@@ -33,7 +33,7 @@ export default function Login() {
 
       <div className="card relative w-full max-w-sm p-8">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-3xl font-black text-emerald-950 shadow-[0_0_40px_-6px_rgba(16,185,129,0.7)]">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-3xl font-black text-emerald-950 shadow-[0_0_40px_-6px_rgba(31,107,74,0.7)]">
             $
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">نظام نقاط البيع</h1>
