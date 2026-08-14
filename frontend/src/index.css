@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", ui-sans-serif, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Cool sage-white — deliberately NOT the warm AI-cream (#F4F1EA) look. */
+  --color-paper: #EAEEE3;
+  --color-paper-dim: #DCE3D2;
+  --color-surface: #FFFFFF;
+
+  --color-ink: #191D16;
+  --color-ink-soft: #4C5245;
+  --color-ink-faint: #7C8371;
+
+  /* Deep pine — the sidebar/header identity color, like a grocer's awning. */
+  --color-pine: #16302A;
+  --color-pine-deep: #0E211C;
+  --color-pine-line: #24463D;
+
+  --color-evergreen: #1F6B4A;
+  --color-evergreen-dim: #17523A;
+  --color-evergreen-tint: #DCEBE1;
+
+  --color-tomato: #BB3E10;
+  --color-tomato-tint: #F6DDCF;
+
+  --color-mustard: #C99A03;
+  --color-mustard-tint: #F7E9BC;
+
+  --radius-tag: 4px;
+  --shadow-card: 0 1px 2px rgba(25, 29, 22, 0.04), 0 4px 12px rgba(25, 29, 22, 0.06);
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-feature-settings: "tnum" 1;
+}
+
+* {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Shelf-tag: the signature element. A small die-cut price/label chip with
+   a notch on the left, used for prices, totals, and stock-alert states. */
+.shelf-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: var(--color-mustard-tint);
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-mustard);
+  border-radius: var(--radius-tag);
+  padding: 2px 9px 2px 12px;
+}
+.shelf-tag::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--color-paper);
+  border: 1.5px solid var(--color-mustard);
+  border-radius: 50%;
+}
+.shelf-tag--alert {
+  background: var(--color-tomato-tint);
+  border-color: var(--color-tomato);
+  color: var(--color-tomato);
+}
+.shelf-tag--alert::before {
+  border-color: var(--color-tomato);
+}
+
+/* Perforated tear-line — evokes a paper receipt above totals. */
+.tear-line {
+  border: none;
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-ink-faint) 0,
+    var(--color-ink-faint) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  opacity: 0.5;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid rgba(25, 29, 22, 0.08);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Touch-friendly tap targets for the POS terminal (kiosk browser, no mouse). */
+.tap-target {
+  min-height: 48px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-evergreen);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
