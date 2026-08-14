@@ -228,7 +228,7 @@ export default function Pos() {
         <div className="border-t border-base-700/60 px-5 py-4">
           <div className="mb-1 flex items-baseline justify-between">
             <span className="text-sm text-base-300">المجموع الفرعي</span>
-            <span className="font-mono text-2xl font-bold tabular-nums text-white" dir="ltr">
+            <span className="shelf-tag px-3 py-1 text-xl" dir="ltr">
               {formatMoney(subtotal)}
             </span>
           </div>
@@ -323,8 +323,10 @@ function PaymentModal({
           <div className="flex justify-between py-0.5 text-sm text-base-300">
             <span>الضريبة</span><span className="font-mono" dir="ltr">{formatMoney(tax)}</span>
           </div>
-          <div className="mt-2 flex justify-between border-t border-base-700 pt-2 text-lg font-bold text-white">
-            <span>الإجمالي</span><span className="font-mono text-emerald-400" dir="ltr">{formatMoney(total)}</span>
+          <hr className="tear-line my-2" />
+          <div className="flex items-center justify-between pt-1 text-lg font-bold text-white">
+            <span>الإجمالي</span>
+            <span className="shelf-tag px-3 py-1" dir="ltr">{formatMoney(total)}</span>
           </div>
         </div>
 
@@ -362,7 +364,7 @@ function PaymentModal({
                 onClick={() => setMethod(m)}
                 className={`rounded-lg px-3 py-2.5 text-sm font-semibold transition-all ${
                   method === m
-                    ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_20px_-6px_rgba(16,185,129,0.6)]'
+                    ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_20px_-6px_rgba(31,107,74,0.6)]'
                     : 'bg-base-800 text-base-300 ring-1 ring-base-600/60 hover:bg-base-700 hover:text-white'
                 }`}
               >
@@ -461,8 +463,9 @@ function ReceiptModal({ sale, onClose }: { sale: Sale; onClose: () => void }) {
             <div className="flex justify-between"><span>المجموع الفرعي</span><span className="font-mono" dir="ltr">{formatMoney(sale.subtotal)}</span></div>
             <div className="flex justify-between"><span>الخصم</span><span className="font-mono" dir="ltr">-{formatMoney(sale.discount)}</span></div>
             <div className="flex justify-between"><span>الضريبة</span><span className="font-mono" dir="ltr">{formatMoney(sale.tax)}</span></div>
-            <div className="flex justify-between text-base font-bold text-white">
-              <span>الإجمالي</span><span className="font-mono text-emerald-400" dir="ltr">{formatMoney(sale.total)}</span>
+            <div className="flex items-center justify-between pt-0.5 text-base font-bold text-white">
+              <span>الإجمالي</span>
+              <span className="shelf-tag px-2.5 py-0.5" dir="ltr">{formatMoney(sale.total)}</span>
             </div>
             <div className="flex justify-between"><span>المدفوع ({sale.paymentMethod})</span><span className="font-mono" dir="ltr">{formatMoney(sale.amountPaid)}</span></div>
             <div className="flex justify-between text-emerald-400">

@@ -84,7 +84,7 @@ export default function Layout() {
     <div className="flex min-h-screen bg-base-950">
       <aside className="fixed inset-y-0 start-0 z-40 flex w-60 flex-col border-e border-base-700/60 bg-base-900">
         <div className="flex items-center gap-3 border-b border-base-700/60 px-5 py-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-lg font-black text-emerald-950 shadow-[0_0_24px_-4px_rgba(16,185,129,0.6)]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-lg font-black text-emerald-950 shadow-[0_0_24px_-4px_rgba(31,107,74,0.6)]">
             $
           </div>
           <div>

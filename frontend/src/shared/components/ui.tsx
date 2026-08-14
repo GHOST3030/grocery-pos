@@ -50,7 +50,7 @@ export function Button({
 }) {
   const variants: Record<string, string> = {
     primary:
-      'bg-emerald-500 text-emerald-950 font-semibold hover:bg-emerald-400 active:bg-emerald-500 disabled:bg-base-600 disabled:text-base-400 shadow-[0_0_20px_-6px_rgba(16,185,129,0.5)]',
+      'bg-emerald-500 text-emerald-950 font-semibold hover:bg-emerald-400 active:bg-emerald-500 disabled:bg-base-600 disabled:text-base-400 shadow-[0_0_20px_-6px_rgba(31,107,74,0.5)]',
     secondary:
       'bg-base-800 text-base-200 ring-1 ring-base-600/60 hover:bg-base-700 hover:text-white disabled:text-base-400',
     danger: 'bg-red-500/90 text-white font-semibold hover:bg-red-500 disabled:bg-base-600 disabled:text-base-400',
